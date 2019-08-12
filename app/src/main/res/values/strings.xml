@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Albums Photos Viewer</string>
+    <string name="album_title">Title ="\u00A0"</string>
+    <string name="album_author">Author ="\u00A0"</string>
+    <string name="list_of_albums">List of Albums</string>
+    <string name="gallery">Gallery</string>
+    <string name="whiteSpace">\u00A0</string>
+    <string name="noInternetConnection">No Internet Connection</string>
+</resources>
