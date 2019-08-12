@@ -68,6 +68,7 @@ class GalleryActivity : AppCompatActivity(), NetworkStateReceiver.NetworkStateRe
     }
 
     private fun getPhotos(albumId: Int) {
+        gallery_progressBar.visibility = View.VISIBLE
         compositeDisposable.add(photoApi.getPhotos(albumId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

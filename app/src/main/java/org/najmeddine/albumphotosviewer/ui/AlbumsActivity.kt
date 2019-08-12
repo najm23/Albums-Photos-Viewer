@@ -68,6 +68,7 @@ class AlbumsActivity : AppCompatActivity(), NetworkStateReceiver.NetworkStateRec
 
 
     private fun getAlbums() {
+        album_progressBar.visibility = View.VISIBLE
         compositeDisposable.add(albumsApi.albums
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
