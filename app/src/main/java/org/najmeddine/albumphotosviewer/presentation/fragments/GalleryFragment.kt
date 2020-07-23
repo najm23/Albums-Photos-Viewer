@@ -1,53 +1,67 @@
-package org.najmeddine.albumphotosviewer.ui
+package org.najmeddine.albumphotosviewer.presentation.fragments
 
 import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
+import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_gallery.*
 import kotlinx.android.synthetic.main.custom_toolbar_layout.*
+import kotlinx.android.synthetic.main.fragment_gallery.*
 import org.najmeddine.albumphotosviewer.R
-import org.najmeddine.albumphotosviewer.model.Photo
-import org.najmeddine.albumphotosviewer.retrofit.Client
-import org.najmeddine.albumphotosviewer.retrofit.GetDataApi
-import org.najmeddine.albumphotosviewer.utils.*
+import org.najmeddine.albumphotosviewer.core.model.Photo
+import org.najmeddine.albumphotosviewer.network.Client
+import org.najmeddine.albumphotosviewer.network.GetDataApi
+import org.najmeddine.albumphotosviewer.presentation.utils.EXTRA_ALBUM_DEFAULT_ID
+import org.najmeddine.albumphotosviewer.presentation.utils.EXTRA_ALBUM_ID
+import org.najmeddine.albumphotosviewer.presentation.utils.GALLERY_SPAN_COUNT
+import org.najmeddine.albumphotosviewer.presentation.utils.NetworkStateReceiver
 import org.najmeddine.photophotosviewer.Adapter.PhotoAdapter
 
-class GalleryActivity : AppCompatActivity(), NetworkStateReceiver.NetworkStateReceiverListener {
+
+class GalleryFragment : Fragment(), NetworkStateReceiver.NetworkStateReceiverListener {
 
     private var networkStateReceiver: NetworkStateReceiver? = null
 
 
     private lateinit var photoApi: GetDataApi
     private var compositeDisposable: CompositeDisposable = CompositeDisposable()
-    private var albumId: Int = 0
-
+    private lateinit var albumId: Number
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ViewHelper().setViewTranslucent(window)
-        setContentView(R.layout.activity_gallery)
-        albumId = intent.getIntExtra(EXTRA_ALBUM_ID, EXTRA_ALBUM_DEFAULT_ID)
+        arguments?.getInt(EXTRA_ALBUM_ID, EXTRA_ALBUM_DEFAULT_ID)?.let {
+            albumId = it
+        }
         app_bar_title.text = getString(R.string.gallery)
-        app_bar_icon.setImageDrawable(getDrawable(R.drawable.ic_photos_gallery))
+        app_bar_icon.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_photos_gallery, null))
         gallery_progressBar.visibility = View.VISIBLE
         setNetworkStateReceiver()
     }
 
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_gallery, container, false)
+    }
+
     private fun setNetworkStateReceiver() {
-        networkStateReceiver = NetworkStateReceiver(this)
+        networkStateReceiver = NetworkStateReceiver(context)
         networkStateReceiver!!.addListener(this)
-        applicationContext.registerReceiver(networkStateReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
+        context?.registerReceiver(networkStateReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
     }
 
     fun initAlbumRecyclerView() {
         photos_rv.setHasFixedSize(true)
-        photos_rv.layoutManager = GridLayoutManager(this, GALLERY_SPAN_COUNT)
+        photos_rv.layoutManager = GridLayoutManager(context, GALLERY_SPAN_COUNT)
         gallery_no_internet.visibility = View.GONE
         photos_rv.visibility = View.VISIBLE
     }
@@ -67,7 +81,7 @@ class GalleryActivity : AppCompatActivity(), NetworkStateReceiver.NetworkStateRe
         gallery_no_internet.text = getString(R.string.noInternetConnection)
     }
 
-    private fun getPhotos(albumId: Int) {
+    private fun getPhotos(albumId: Number) {
         gallery_progressBar.visibility = View.VISIBLE
         compositeDisposable.add(photoApi.getPhotos(albumId)
             .subscribeOn(Schedulers.io())
@@ -76,7 +90,7 @@ class GalleryActivity : AppCompatActivity(), NetworkStateReceiver.NetworkStateRe
         )
     }
 
-    private fun filterPhotoList(photoslist: List<Photo>?, albumId: Int): List<Photo> {
+    private fun filterPhotoList(photoslist: List<Photo>?, albumId: Number): List<Photo> {
         val filtredPhotolist: MutableList<Photo> = ArrayList()
         photoslist?.forEach {
             if (it.albumId.equals(albumId)) {
@@ -87,8 +101,9 @@ class GalleryActivity : AppCompatActivity(), NetworkStateReceiver.NetworkStateRe
     }
 
     private fun displayData(photos: List<Photo>?) {
-        val photoAdapter = PhotoAdapter(this, photos!!)
+        val photoAdapter = PhotoAdapter(context, photos!!)
         photos_rv.adapter = photoAdapter
         gallery_progressBar.visibility = View.GONE
     }
+
 }

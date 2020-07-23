@@ -1,4 +1,4 @@
-package org.najmeddine.albumphotosviewer.utils
+package org.najmeddine.albumphotosviewer.presentation.utils
 
 import android.content.Context
 import android.os.Build

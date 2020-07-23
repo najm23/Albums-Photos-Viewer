@@ -1,4 +1,4 @@
-package org.najmeddine.albumphotosviewer.utils
+package org.najmeddine.albumphotosviewer.presentation.utils
 
 const val EXTRA_ALBUM_ID = "extra_album_id"
 const val EXTRA_ALBUM_DEFAULT_ID = 999999

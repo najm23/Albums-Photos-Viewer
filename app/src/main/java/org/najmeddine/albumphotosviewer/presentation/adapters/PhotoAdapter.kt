@@ -10,13 +10,13 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import org.najmeddine.albumphotosviewer.R
-import org.najmeddine.albumphotosviewer.model.Photo
-import org.najmeddine.albumphotosviewer.utils.GALLERY_SPAN_COUNT
-import org.najmeddine.albumphotosviewer.utils.ViewHelper
+import org.najmeddine.albumphotosviewer.core.model.Photo
+import org.najmeddine.albumphotosviewer.presentation.utils.GALLERY_SPAN_COUNT
+import org.najmeddine.albumphotosviewer.presentation.utils.ViewHelper
 
 
 class PhotoAdapter(
-    private val context: Context,
+    private val context: Context?,
     private var photoList: List<Photo>
 ) : RecyclerView.Adapter<PhotoAdapter.PhotoHolder>() {
 
@@ -51,7 +51,7 @@ class PhotoAdapter(
                     .fallback(R.drawable.ic_error) //7
                     .into(it)
             } //8
-        } else null //1
+        }
 
     }
 

@@ -1,4 +1,4 @@
-package org.najmeddine.albumphotosviewer.model
+package org.najmeddine.albumphotosviewer.core.model
 
 class Album(
     var userId: Int,

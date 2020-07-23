@@ -1,4 +1,4 @@
-package org.najmeddine.albumphotosviewer.model
+package org.najmeddine.albumphotosviewer.core.model
 
 data class Photo(
     val albumId: Int,

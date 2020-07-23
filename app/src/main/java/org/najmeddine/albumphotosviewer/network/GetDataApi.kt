@@ -1,9 +1,9 @@
-package org.najmeddine.albumphotosviewer.retrofit
+package org.najmeddine.albumphotosviewer.network
 
 import io.reactivex.Observable
-import org.najmeddine.albumphotosviewer.model.Album
-import org.najmeddine.albumphotosviewer.model.Photo
-import org.najmeddine.albumphotosviewer.model.User
+import org.najmeddine.albumphotosviewer.core.model.Album
+import org.najmeddine.albumphotosviewer.core.model.Photo
+import org.najmeddine.albumphotosviewer.core.model.User
 import retrofit2.http.GET
 import retrofit2.http.Path
 
@@ -19,6 +19,6 @@ interface GetDataApi {
 
     /* Get list of photos */
     @GET("albums/{id}/photos")
-    fun getPhotos(@Path("id") id: Int?): Observable<List<Photo>>
+    fun getPhotos(@Path("id") id: Number?): Observable<List<Photo>>
 
 }

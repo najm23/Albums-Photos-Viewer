@@ -1,4 +1,4 @@
-package org.najmeddine.albumphotosviewer.Adapter
+package org.najmeddine.albumphotosviewer.presentation.adapters
 
 
 import android.content.Context
@@ -7,16 +7,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import org.najmeddine.albumphotosviewer.R
-import org.najmeddine.albumphotosviewer.model.Album
-import org.najmeddine.albumphotosviewer.ui.GalleryActivity
-import org.najmeddine.albumphotosviewer.utils.EXTRA_ALBUM_ID
+import org.najmeddine.albumphotosviewer.core.model.Album
+import org.najmeddine.albumphotosviewer.presentation.utils.EXTRA_ALBUM_ID
 
 
 class AlbumAdapter(
-    private val context: Context,
+    private val context: Context?,
     private var albumList: List<Album>
+    private lateinit var progressBarState : MutableLiveData<Boolean>
 ) : RecyclerView.Adapter<AlbumAdapter.AlbumHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlbumHolder {
@@ -32,16 +34,22 @@ class AlbumAdapter(
 
     override fun onBindViewHolder(holder: AlbumHolder, position: Int) {
         holder.titleTv?.text =
-            StringBuilder().append(context.getString(R.string.album_title), albumList[position].title).toString()
+            StringBuilder().append(context?.getString(R.string.album_title), albumList[position].title).toString()
 
 
 
         holder.authorTv?.text =
-            StringBuilder().append(context.getString(R.string.album_author), albumList[position].author).toString()
+            StringBuilder().append(context?.getString(R.string.album_author), albumList[position].author).toString()
         holder.albumView?.setOnClickListener {
-            val intent = Intent(context, GalleryActivity::class.java)
-            intent.putExtra(EXTRA_ALBUM_ID, albumList[position].id)
-            context.startActivity(intent)
+
+
+            fun getAlbumslist(): LiveData<List<Album>> {
+                return albumList
+            }
+
+            fun getPregressBarState(): LiveData<Boolean> {
+                return progressBarState
+            }
         }
     }
 

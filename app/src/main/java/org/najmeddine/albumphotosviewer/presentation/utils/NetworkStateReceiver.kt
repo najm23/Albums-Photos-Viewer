@@ -1,4 +1,4 @@
-package org.najmeddine.albumphotosviewer.utils
+package org.najmeddine.albumphotosviewer.presentation.utils
 
 
 import android.content.BroadcastReceiver
@@ -9,10 +9,10 @@ import android.net.ConnectivityManager
 import java.util.*
 
 
-class NetworkStateReceiver(context: Context) : BroadcastReceiver() {
+class NetworkStateReceiver(context: Context?) : BroadcastReceiver() {
 
     private var mManager: ConnectivityManager =
-        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     private var mListeners: MutableList<NetworkStateReceiverListener> = ArrayList()
     private var mConnected: Boolean = false
 
@@ -65,8 +65,9 @@ class NetworkStateReceiver(context: Context) : BroadcastReceiver() {
     init {
         val intentFilter = IntentFilter()
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION)
-        context.registerReceiver(this, intentFilter)
+        context?.registerReceiver(this, intentFilter)
         checkStateChanged()
     }
+
 
 }
