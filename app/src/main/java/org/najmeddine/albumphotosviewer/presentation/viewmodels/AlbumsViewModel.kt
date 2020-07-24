@@ -1,7 +1,5 @@
 package org.najmeddine.albumphotosviewer.presentation.viewmodels
 
-import android.provider.MediaStore
-import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,15 +13,15 @@ import org.najmeddine.albumphotosviewer.network.GetDataApi
 class AlbumsViewModel : ViewModel() {
 
     private var compositeDisposable: CompositeDisposable = CompositeDisposable()
-    lateinit var albumsApi: GetDataApi
-    private lateinit var progressBarState : MutableLiveData<Boolean>
-    private lateinit var albumList : MutableLiveData<List<Album>>
+    private lateinit var albumsApi: GetDataApi
+    private  var progressBarState : MutableLiveData<Boolean> = MutableLiveData()
+    private  var albumList : MutableLiveData<List<Album>> = MutableLiveData()
 
     fun getAlbumslist(): LiveData<List<Album>>{
         return albumList
     }
 
-    fun getPregressBarState(): LiveData<Boolean>{
+    fun getProgressBarState(): LiveData<Boolean>{
         return progressBarState
     }
 
@@ -49,7 +47,7 @@ class AlbumsViewModel : ViewModel() {
             .subscribe { users ->
                 albums.forEach lit@{ album ->
                     users.forEach {
-                        if (it.id.equals(album.userId)) {
+                        if (it.id == album.userId) {
                             album.author = it.name
                             return@lit
                         }

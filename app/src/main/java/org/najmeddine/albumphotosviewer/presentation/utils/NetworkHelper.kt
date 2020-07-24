@@ -6,8 +6,7 @@ import android.net.ConnectivityManager
 
 
 fun setNetworkStateReceiver(context:Context?, listener: NetworkStateReceiver.NetworkStateReceiverListener) {
-    var networkStateReceiver :NetworkStateReceiver
-    networkStateReceiver = NetworkStateReceiver(context)
+    val networkStateReceiver = NetworkStateReceiver(context)
     networkStateReceiver.addListener(listener)
     context?.registerReceiver(networkStateReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
 }

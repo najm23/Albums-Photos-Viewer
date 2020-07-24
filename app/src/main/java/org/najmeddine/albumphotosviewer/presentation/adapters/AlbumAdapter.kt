@@ -2,24 +2,17 @@ package org.najmeddine.albumphotosviewer.presentation.adapters
 
 
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import org.najmeddine.albumphotosviewer.R
 import org.najmeddine.albumphotosviewer.core.model.Album
-import org.najmeddine.albumphotosviewer.presentation.utils.EXTRA_ALBUM_ID
+import org.najmeddine.albumphotosviewer.presentation.utils.AlbumSelectedListener
 
 
-class AlbumAdapter(
-    private val context: Context?,
-    private var albumList: List<Album>
-    private lateinit var progressBarState : MutableLiveData<Boolean>
-) : RecyclerView.Adapter<AlbumAdapter.AlbumHolder>() {
+class AlbumAdapter(private val context: Context?, private var albumList: List<Album>, private val albumSelectedListener: AlbumSelectedListener) : RecyclerView.Adapter<AlbumAdapter.AlbumHolder>()  {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlbumHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(
@@ -35,21 +28,10 @@ class AlbumAdapter(
     override fun onBindViewHolder(holder: AlbumHolder, position: Int) {
         holder.titleTv?.text =
             StringBuilder().append(context?.getString(R.string.album_title), albumList[position].title).toString()
-
-
-
         holder.authorTv?.text =
             StringBuilder().append(context?.getString(R.string.album_author), albumList[position].author).toString()
         holder.albumView?.setOnClickListener {
-
-
-            fun getAlbumslist(): LiveData<List<Album>> {
-                return albumList
-            }
-
-            fun getPregressBarState(): LiveData<Boolean> {
-                return progressBarState
-            }
+            albumSelectedListener.onAlbumSelected(albumList[position].id)
         }
     }
 

@@ -1,4 +1,4 @@
-package org.najmeddine.photophotosviewer.Adapter
+package org.najmeddine.albumphotosviewer.presentation.adapters
 
 
 import android.content.Context
@@ -9,6 +9,7 @@ import android.widget.GridLayout
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.squareup.picasso.Picasso
 import org.najmeddine.albumphotosviewer.R
 import org.najmeddine.albumphotosviewer.core.model.Photo
 import org.najmeddine.albumphotosviewer.presentation.utils.GALLERY_SPAN_COUNT
@@ -16,7 +17,7 @@ import org.najmeddine.albumphotosviewer.presentation.utils.ViewHelper
 
 
 class PhotoAdapter(
-    private val context: Context?,
+    private val context: Context,
     private var photoList: List<Photo>
 ) : RecyclerView.Adapter<PhotoAdapter.PhotoHolder>() {
 
@@ -39,20 +40,19 @@ class PhotoAdapter(
     }
 
     override fun onBindViewHolder(holder: PhotoHolder, position: Int) {
-
-
-        if (photoList[position].url != null) {
-            holder.photoIv?.let {
-                Glide.with(holder.itemView)  //2
-                    .load(photoList[position].url) //3
-                    .centerCrop() //4
-                    .placeholder(R.drawable.ic_file_download) //5
-                    .error(R.drawable.ic_broken_image) //6
-                    .fallback(R.drawable.ic_error) //7
-                    .into(it)
-            } //8
-        }
-
+//        holder.photoIv?.let {
+//            Glide.with(context)
+//                .load(photoList[position].thumbnailUrl)
+//                .centerCrop()
+//                .placeholder(R.drawable.ic_file_download)
+//                .error(R.drawable.ic_broken_image)
+//                .fallback(R.drawable.ic_error)
+//                .into(it)
+//        }
+        Picasso.get().load(photoList[position].url)
+            .centerCrop().placeholder(R.drawable.ic_file_download)
+            .error(R.drawable.ic_broken_image)
+            .into(holder.photoIv)
     }
 
     inner class PhotoHolder(photoView: View) : RecyclerView.ViewHolder(photoView) {

@@ -8,30 +8,25 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.custom_toolbar_layout.*
 import kotlinx.android.synthetic.main.fragment_albums.*
 import org.najmeddine.albumphotosviewer.R
 import org.najmeddine.albumphotosviewer.core.model.Album
-import org.najmeddine.albumphotosviewer.network.Client
-import org.najmeddine.albumphotosviewer.network.GetDataApi
 import org.najmeddine.albumphotosviewer.presentation.adapters.AlbumAdapter
+import org.najmeddine.albumphotosviewer.presentation.utils.AlbumSelectedListener
 import org.najmeddine.albumphotosviewer.presentation.utils.NetworkStateReceiver
 import org.najmeddine.albumphotosviewer.presentation.utils.setNetworkStateReceiver
 import org.najmeddine.albumphotosviewer.presentation.viewmodels.AlbumsViewModel
 
 
-class AlbumsFragment : Fragment() , NetworkStateReceiver.NetworkStateReceiverListener {
+class AlbumsFragment (private val albumSelectedListener: AlbumSelectedListener) : Fragment() , NetworkStateReceiver.NetworkStateReceiverListener{
 
     private lateinit var albumsViewModel:AlbumsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setNetworkStateReceiver(context,this)
-        albumsViewModel = ViewModelProviders.of(this).get(AlbumsViewModel::class.java)
-        albumsViewModel.getPregressBarState().observe(this, Observer { state -> setProgressBarState(state) })
-        albumsViewModel.getAlbumslist().observe(this, Observer { albums -> displayData(albums) })
+        albumsViewModel = ViewModelProvider(this).get(AlbumsViewModel::class.java)
     }
 
     private fun setProgressBarState(state: Boolean){
@@ -44,8 +39,15 @@ class AlbumsFragment : Fragment() , NetworkStateReceiver.NetworkStateReceiverLis
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        initView()
+        albumsViewModel.getProgressBarState().observe(viewLifecycleOwner, Observer { state -> setProgressBarState(state) })
+        albumsViewModel.getAlbumslist().observe(viewLifecycleOwner, Observer { albums -> displayData(albums) })
         return inflater.inflate(R.layout.fragment_albums, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        initView()
+        initAlbumRecyclerView()
+        setNetworkStateReceiver(context,this)
     }
 
     private fun initView(){
@@ -53,7 +55,7 @@ class AlbumsFragment : Fragment() , NetworkStateReceiver.NetworkStateReceiverLis
         app_bar_icon.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_albums, null))
     }
 
-    fun initAlbumRecyclerView() {
+    private fun initAlbumRecyclerView() {
         albums_rv.setHasFixedSize(true)
         albums_rv.layoutManager = LinearLayoutManager(context)
         album_no_internet.visibility = View.GONE
@@ -61,7 +63,6 @@ class AlbumsFragment : Fragment() , NetworkStateReceiver.NetworkStateReceiverLis
     }
 
     override fun onNetworkAvailable() {
-        initAlbumRecyclerView()
         albumsViewModel.getAlbums()
     }
 
@@ -79,11 +80,12 @@ class AlbumsFragment : Fragment() , NetworkStateReceiver.NetworkStateReceiverLis
         val albumAdapter =
             AlbumAdapter(
                 context,
-                albums
+                albums,
+                albumSelectedListener
             )
+        albums_rv.visibility=View.VISIBLE
         albums_rv.adapter = albumAdapter
         album_progressBar.visibility = View.GONE
     }
-
 
 }

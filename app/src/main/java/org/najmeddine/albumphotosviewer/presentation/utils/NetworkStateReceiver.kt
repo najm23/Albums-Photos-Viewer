@@ -51,11 +51,6 @@ class NetworkStateReceiver(context: Context?) : BroadcastReceiver() {
         notifyState(l)
     }
 
-    //call this method to remove a listener
-    fun removeListener(l: NetworkStateReceiverListener) {
-        mListeners.remove(l)
-    }
-
     interface NetworkStateReceiverListener {
         fun onNetworkAvailable()
 
