@@ -1,22 +1,24 @@
 package org.najmeddine.albumphotosviewer.network
 
+import org.najmeddine.albumphotosviewer.core.utils.BASE_URL
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 object Client {
-    private var ourInstance: Retrofit? = null
+    private var retrofit: Retrofit? = null
 
     val instance: Retrofit
         get() {
-            if (ourInstance == null) {
-                ourInstance = Retrofit.Builder()
+            if (retrofit == null) {
+                retrofit = Retrofit.Builder()
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create())
-                    .baseUrl("https://jsonplaceholder.typicode.com/")
+                    .baseUrl(BASE_URL)
                     .build()
             }
-            return ourInstance!!
+            return retrofit!!
         }
 }
+
 

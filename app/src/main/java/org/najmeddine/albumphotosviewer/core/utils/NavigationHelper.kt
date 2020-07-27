@@ -1,4 +1,4 @@
-package org.najmeddine.albumphotosviewer.presentation.utils
+package org.najmeddine.albumphotosviewer.core.utils
 
 
 
@@ -12,6 +12,7 @@ class NavigationHelper {
     fun replaceFragment(fragment: Fragment, activity: Activity) {
         val transaction = (activity as AppCompatActivity).supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_container, fragment)
+            .addToBackStack(fragment.javaClass.name)
         transaction.commit()
     }
 }

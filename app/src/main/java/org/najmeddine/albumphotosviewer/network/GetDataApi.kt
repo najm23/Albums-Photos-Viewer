@@ -11,14 +11,14 @@ interface GetDataApi {
 
     /* Get list of albums */
     @get:GET("albums")
-    val albums: Observable<List<Album>>
+    val albums: Observable<MutableList<Album>>
 
     /* Get list of users */
     @get:GET("users")
-    val users: Observable<List<User>>
+    val users: Observable<MutableList<User>>
 
     /* Get list of photos */
     @GET("albums/{id}/photos")
-    fun getPhotos(@Path("id") id: Number?): Observable<List<Photo>>
+    fun getPhotos(@Path("id") id: Number?): Observable<MutableList<Photo>>
 
 }

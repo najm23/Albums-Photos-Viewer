@@ -14,14 +14,14 @@ class AlbumsViewModel : ViewModel() {
 
     private var compositeDisposable: CompositeDisposable = CompositeDisposable()
     private lateinit var albumsApi: GetDataApi
-    private  var progressBarState : MutableLiveData<Boolean> = MutableLiveData()
-    private  var albumList : MutableLiveData<List<Album>> = MutableLiveData()
+    private var progressBarState: MutableLiveData<Boolean> = MutableLiveData()
+    private var albumList: MutableLiveData<MutableList<Album>> = MutableLiveData()
 
-    fun getAlbumslist(): LiveData<List<Album>>{
+    fun getAlbumslist(): LiveData<MutableList<Album>> {
         return albumList
     }
 
-    fun getProgressBarState(): LiveData<Boolean>{
+    fun getProgressBarState(): LiveData<Boolean> {
         return progressBarState
     }
 
@@ -34,27 +34,29 @@ class AlbumsViewModel : ViewModel() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { albums ->
                 //sort album list alphabetically
-                val sortedAlbumList = albums.sortedWith(compareBy<Album> { it.title }.thenBy { it.id })
-                getUsers(sortedAlbumList)
+                val sortedAlbumList =
+                    albums.sortedWith(compareBy<Album> { it.title }.thenBy { it.id })
+                getUsers(sortedAlbumList.toMutableList())
             }
         )
     }
 
-    private fun getUsers(albums: List<Album>) {
-        compositeDisposable.add(albumsApi.users
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { users ->
-                albums.forEach lit@{ album ->
-                    users.forEach {
-                        if (it.id == album.userId) {
-                            album.author = it.name
-                            return@lit
+    private fun getUsers(albums: MutableList<Album>) {
+        compositeDisposable.add(
+            albumsApi.users
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { users ->
+                    albums.forEach lit@{ album ->
+                        users.forEach {
+                            if (it.id == album.userId) {
+                                album.author = it.name
+                                return@lit
+                            }
                         }
                     }
+                    albumList.postValue(albums)
                 }
-                albumList.postValue(albums)
-            }
         )
     }
 }

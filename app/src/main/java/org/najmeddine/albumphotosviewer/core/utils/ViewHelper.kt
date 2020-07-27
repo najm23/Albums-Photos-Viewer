@@ -1,4 +1,4 @@
-package org.najmeddine.albumphotosviewer.presentation.utils
+package org.najmeddine.albumphotosviewer.core.utils
 
 import android.content.Context
 import android.view.Window
@@ -11,8 +11,7 @@ class ViewHelper {
      * set the activity layout translucent and with no limits
      */
     fun setViewTranslucent(window: Window) {
-        window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
-        window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
+        window.addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN)
     }
 
     /**

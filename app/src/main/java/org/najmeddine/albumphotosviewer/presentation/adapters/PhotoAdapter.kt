@@ -8,12 +8,11 @@ import android.view.ViewGroup
 import android.widget.GridLayout
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.squareup.picasso.Picasso
 import org.najmeddine.albumphotosviewer.R
 import org.najmeddine.albumphotosviewer.core.model.Photo
-import org.najmeddine.albumphotosviewer.presentation.utils.GALLERY_SPAN_COUNT
-import org.najmeddine.albumphotosviewer.presentation.utils.ViewHelper
+import org.najmeddine.albumphotosviewer.core.utils.GALLERY_SPAN_COUNT
+import org.najmeddine.albumphotosviewer.core.utils.ViewHelper
 
 
 class PhotoAdapter(
@@ -40,17 +39,8 @@ class PhotoAdapter(
     }
 
     override fun onBindViewHolder(holder: PhotoHolder, position: Int) {
-//        holder.photoIv?.let {
-//            Glide.with(context)
-//                .load(photoList[position].thumbnailUrl)
-//                .centerCrop()
-//                .placeholder(R.drawable.ic_file_download)
-//                .error(R.drawable.ic_broken_image)
-//                .fallback(R.drawable.ic_error)
-//                .into(it)
-//        }
         Picasso.get().load(photoList[position].url)
-            .centerCrop().placeholder(R.drawable.ic_file_download)
+            .placeholder(R.drawable.ic_file_download)
             .error(R.drawable.ic_broken_image)
             .into(holder.photoIv)
     }

@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import org.najmeddine.albumphotosviewer.R
 import org.najmeddine.albumphotosviewer.core.model.Album
-import org.najmeddine.albumphotosviewer.presentation.utils.AlbumSelectedListener
+import org.najmeddine.albumphotosviewer.core.utils.AlbumSelectedListener
 
 
 class AlbumAdapter(private val context: Context?, private var albumList: List<Album>, private val albumSelectedListener: AlbumSelectedListener) : RecyclerView.Adapter<AlbumAdapter.AlbumHolder>()  {
@@ -40,5 +40,4 @@ class AlbumAdapter(private val context: Context?, private var albumList: List<Al
         val titleTv = itemView.findViewById<TextView?>(R.id.album_title_tv)
         val albumView = itemView.findViewById<View?>(R.id.card_view)
     }
-
 }
